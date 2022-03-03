@@ -1,5 +1,6 @@
-motdedyck: motcache.c
+motcache: motcache.c
 	gcc -o motcache -Wall -Wextra -std=c11 motcache.c
+	./motcache entree.txt
 test:   motcache 
 	bats check.bats
 html: README.md
