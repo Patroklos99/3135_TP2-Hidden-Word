@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-
 typedef struct {
-    char tabPointeur[13];
-    size_t nbPtr;
-    int compt;
-} mots;
+    int debutX;
+    int debutY;
+    int finX;
+    int finY;
+} positions;
 
 void creerTabMots(char tab[13][13], FILE *file, int *compt) {
     int c;
@@ -52,38 +52,49 @@ void obtenirMots(char tab[150][20], FILE *file, const int *compt) {
     return reponse;
 }*/
 
-bool trouverMot(char tab[150][20], char bankMots[13][13], int x, int y, int longueurMatch, int motNumero) {
-    int longueurMot = (int) strlen(tab[motNumero]) - 1;
-    if (longueurMot == longueurMatch)
-        return true;
+void archiverPositions(int x, int y) {
 
-    if (x < 0 || y < 0 || x >= 12 || y >= 12){
-        return false;}
+}
+
+void identifierPositions() {
+
+}
+
+bool trouverMot(char tab[150][20], char bankMots[13][13], int x, int y, int longueurMatch, int motNumero, positions positions1) {
+    int longueurMot = (int) strlen(tab[motNumero]) - 1;
+    if (longueurMot == longueurMatch){
+        identifierPositions();
+        return true;
+    }
+    if (x < 0 || y < 0 || x >= 12 || y >= 12)
+        return false;
 
     if (bankMots[y][x] == tab[motNumero][longueurMatch]) {
+        archiverPositions(x, y);
+                // marké comme visité
         char temp = tab[x][y];
-
-        bool reponse =trouverMot(tab, bankMots, x - 1, y, (longueurMatch + 1), motNumero) |
-                      trouverMot(tab, bankMots, x + 1, y, (longueurMatch + 1), motNumero) |
-                      trouverMot(tab, bankMots, x, y - 1, (longueurMatch + 1), motNumero) |
-                      trouverMot(tab, bankMots, x, y + 1, (longueurMatch + 1), motNumero);
+        //tab[x][y] = '#';
+        bool answer = trouverMot(tab, bankMots, x - 1, y, (longueurMatch + 1), motNumero, positions1) |
+                      trouverMot(tab, bankMots, x + 1, y, (longueurMatch + 1), motNumero, positions1)|
+                      trouverMot(tab, bankMots, x, y - 1, (longueurMatch + 1), motNumero, positions1) |
+                      trouverMot(tab, bankMots, x, y + 1, (longueurMatch + 1), motNumero, positions1);
+        // marké comme non visité encore
         tab[x][y] = temp;
-
-        return reponse;
-    } else 
+        return answer;
+    } else
         return false;
 }
 
-void trouverPremierLettre(char tab[150][20], char bankMots[13][13]) {
+void trouverPremierLettre(char tab[150][20], char bankMots[13][13], positions positions1) {
     int w = 0;
         int longueurMatch = 0;
         for (int nligne = 0; nligne <= 11; nligne++) {
             for (int ncol = 0; ncol <= 12; ncol++) {
                 if (tab[w][0] == bankMots[ncol][nligne]) {
-                    if (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w)) {
-                        printf("mot trouve -> %s \n", tab[w]);
+                    if (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, positions1)) {
+                        printf("mot trouve -> %s", tab[w]);
                         w++;
-                        ncol = 0;
+                        ncol = -1;
                         nligne = 0;
                     }
                 }
@@ -91,11 +102,11 @@ void trouverPremierLettre(char tab[150][20], char bankMots[13][13]) {
         }
 }
 
-void rechercheMots(char tab[150][20], char bankMots[13][13]) {
-    trouverPremierLettre(tab, bankMots);
+void rechercheMots(char tab[150][20], char bankMots[13][13], positions positions1) {
+    trouverPremierLettre(tab, bankMots, positions1);
 }
 
-void lireFichier(char **argv, mots mot1, char tab[150][20]) {
+void lireFichier(char **argv, char tab[150][20], positions positions1) {
     FILE *file = fopen(argv[1], "r");
     int compteur = 0;
     char bankMots[13][13];
@@ -110,16 +121,15 @@ void lireFichier(char **argv, mots mot1, char tab[150][20]) {
             printf("%c", bankMots[a][b]);
     }
     fclose(file);
-    rechercheMots(tab, bankMots);
+    rechercheMots(tab, bankMots, positions1);
 }
 
 int main(int argc, char *argv[]) {
     char tab[150][20];
-    mots mot1 = {{0}, 2, 0};
-    lireFichier(argv, mot1, tab);
+    positions pos1= {0, 0, 0, 0};
+    lireFichier(argv, tab, pos1);
     /*for (int w = 0; w <= 20; ++w) {
         printf("%s", tab[w]);
     }*/
     return 0;
 }
-
