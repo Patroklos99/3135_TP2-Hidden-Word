@@ -83,9 +83,9 @@ positions1) {
         // marké comme visité
         //char temp = tab[x][y];
         //tab[x][y] = '#';
-        bool answer = trouverMot(tab, bankMots, x - 1, y, (longueurMatch + 1), motNumero, positions1) |
-                      trouverMot(tab, bankMots, x + 1, y, (longueurMatch + 1), motNumero, positions1) |
-                      trouverMot(tab, bankMots, x, y - 1, (longueurMatch + 1), motNumero, positions1) |
+        bool answer = trouverMot(tab, bankMots, x - 1, y, (longueurMatch + 1), motNumero, positions1) ||
+                      trouverMot(tab, bankMots, x + 1, y, (longueurMatch + 1), motNumero, positions1) ||
+                      trouverMot(tab, bankMots, x, y - 1, (longueurMatch + 1), motNumero, positions1) ||
                       trouverMot(tab, bankMots, x, y + 1, (longueurMatch + 1), motNumero, positions1);
         //tab[x][y] = temp;
         return answer;
