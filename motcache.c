@@ -77,7 +77,7 @@ void trouverPremierLettre(char tab[150][45], char bankMots[13][13]) {
     for (int nligne = 0; nligne <= 11; nligne++) {
         for (int ncol = 0; ncol <= 12; ncol++) {
             if ((tab[w][0] | 0x20) == (bankMots[ncol][nligne] | 0x20)) {
-                printf("recherche du mot: %s", tab[w]);
+                //printf("recherche du mot: %s", tab[w]);
                 if (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, O)
                     || trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, N)
                     || trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, S)
@@ -122,7 +122,8 @@ int main(int argc, char *argv[]) {
     lireFichier(argv, tab);
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("Elapsed: %f seconds", time_spent);
+    printf("\nElapsed: %.4f seconds", time_spent);
+    printf("\nElapsed: %.3f ms\n", time_spent*1000*(argc-1));
     return 0;
 }
 
