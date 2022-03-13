@@ -1,6 +1,5 @@
 prog=motcache
 arg=entree.txt
-nom=""
 # Normal usage
 
 @test "test0 : sans aucune entree, affichage d'erreur" {
