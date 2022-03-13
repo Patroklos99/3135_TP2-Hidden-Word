@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <time.h>
+#include <stdlib.h>
 
 enum dir {
     N, E, S, O
@@ -33,7 +34,6 @@ void obtenirMots(char tab[150][45], FILE *file, const int *compt) {
 }
 
 void modifier(char bank[13][13], int x, int y) {
-    //printf("Positon trouve a (%d:%d)\n", x, y);
     bank[y][x] = (char) tolower(bank[y][x]);
 }
 
@@ -46,26 +46,21 @@ bool trouverMot(char tab[150][45], char bankMots[13][13], int x, int y, int long
     if ((bankMots[y][x] | 0x20) == (tab[motNumero][longueurMatch] | 0x20)) {
         bool answer;
         switch (dir) {
-            case N:
-                answer = trouverMot(tab, bankMots, x + 1, y,
+            case N: answer = trouverMot(tab, bankMots, x + 1, y,
                                     (longueurMatch + 1), motNumero,N);
                 break;
-            case S:
-                answer = trouverMot(tab, bankMots, x - 1, y,
+            case S:answer = trouverMot(tab, bankMots, x - 1, y,
                                     (longueurMatch + 1), motNumero,S);
                 break;
-            case E:
-                answer = trouverMot(tab, bankMots, x, y - 1,
-                                    (longueurMatch + 1), motNumero,E);
-                break;
-            case O:
-                answer = trouverMot(tab, bankMots, x, y + 1,
+            case O: answer = trouverMot(tab, bankMots, x, y - 1,
                                     (longueurMatch + 1), motNumero,O);
                 break;
+            case E: answer = trouverMot(tab, bankMots, x, y + 1,
+                                    (longueurMatch + 1), motNumero,E);
+                break;
         }
-        if (answer) {
+        if (answer)
             modifier(bankMots, x, y);
-        }
         return answer;
     } else
         return false;
@@ -73,15 +68,14 @@ bool trouverMot(char tab[150][45], char bankMots[13][13], int x, int y, int long
 
 void trouverPremierLettre(char tab[150][45], char bankMots[13][13]) {
     int w = 0;
-    int longueurMatch = 0;
+    int longueurMatch= 0;
     for (int nligne = 0; nligne <= 11; nligne++) {
         for (int ncol = 0; ncol <= 12; ncol++) {
             if ((tab[w][0] | 0x20) == (bankMots[ncol][nligne] | 0x20)) {
-                //printf("recherche du mot: %s", tab[w]);
-                if (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, O)
+                if (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, E)
                     || trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, N)
                     || trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, S)
-                    || (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, E))) {
+                    || (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, O))) {
                     w++;
                     ncol = 0;
                     nligne = -1;
@@ -91,39 +85,64 @@ void trouverPremierLettre(char tab[150][45], char bankMots[13][13]) {
     }
 }
 
+void afficherMot(char bankMots[13][13]) {
+    for (int b = 0; b <= 11; b++) {
+        for (int a = 0; a <= 12; a++)
+            if (isupper(bankMots[a][b]))
+                printf("%c", bankMots[a][b]);
+    }
+}
+
 void rechercheMots(char tab[150][45], char bankMots[13][13]) {
     trouverPremierLettre(tab, bankMots);
 }
 
-void lireFichier(char **argv, char tab[150][45]) {
-    FILE *file = fopen(argv[1], "r");
-    int compteur = 0;
-    char bankMots[13][13];
-
-    while (file && compteur <= 45) {
-        compteur <= 12 ? creerTabMots(bankMots, file, (int *) &compteur) : obtenirMots(tab, file, (int *) &compteur);
-        compteur++;
+void validerFichierExiste(FILE *file) {
+    if (!file) {
+        printf("Fichier n'existe pas\n");
+        exit(0);
     }
+}
+
+void creerTableau(FILE *file, char tab[150][45], char bankMots[13][13] ) {
+    int compt = 0;
+    validerFichierExiste(file);
+        while (file && compt <= 45) {
+            compt <= 12 ? creerTabMots(bankMots, file, (int *) &compt) : obtenirMots(tab, file, (int *) &compt);
+            compt++;
+        }
+}
+
+void validerFichier(int argc) {
+    if (argc == 1) {
+        printf("Argument manquant\n");
+        exit(0);
+    }
+    if (argc > 2) {
+        printf("Trop d'arguments\n");
+        exit(0);
+
+    }
+}
+
+void lireFichier(char **argv, char tab[150][45]) {
+    char bankMots[13][13];
+    FILE *file = fopen(argv[1], "r");
+    creerTableau(file, tab, bankMots);
     fclose(file);
     rechercheMots(tab, bankMots);
-    printf("\n");
-    for (int b = 0; b <= 11; b++) {
-        for (int a = 0; a <= 12; a++)
-            if (isupper(bankMots[a][b])) {
-                printf("%c", bankMots[a][b]);
-            }
-    }
-
+    afficherMot(bankMots);
 }
 
 int main(int argc, char *argv[]) {
     clock_t begin = clock();
     char tab[150][45];
+    validerFichier(argc);
     lireFichier(argv, tab);
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("\nElapsed: %.4f seconds", time_spent);
-    printf("\nElapsed: %.3f ms\n", time_spent*1000*(argc-1));
+    printf("\nElapsed: %.3f ms\n", time_spent*1000);
     return 0;
 }
-
+ 
