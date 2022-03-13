@@ -1,14 +1,14 @@
+#include "fonctrecherche.h"
+#include "fonctlecture.h"
+#include "fonctcreertab.h"
+#include "fonctaffichage.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <stdlib.h>
 
-enum dir {
-    N, E, S, O
-};
-
-void creer_tab_mots(char tab[13][13], FILE *file, int *compt) {
+void creer_tab_bankmots(char tab[13][13], FILE *file, int *compt) {
    int c;
    int a = 0;
    int b = 0;
@@ -26,7 +26,7 @@ void creer_tab_mots(char tab[13][13], FILE *file, int *compt) {
    *compt = 12;
 }
 
-void obtenir_mots(char tab[150][45], FILE *file, const int *compt) {
+void creer_tab_motrecherche(char tab[150][45], FILE *file, const int *compt) {
    int i = *compt;
    i = i - 13;
    (fgets(tab[i], 14, file));
@@ -102,6 +102,7 @@ void afficher_mot(char bankMots[13][13]) {
          if (isupper(bankMots[a][b]))
             printf("%c", bankMots[a][b]);
    }
+	printf("\n");
 }
 
 void recherche_mots(char tab[150][45], char bankMots[13][13]) {
@@ -119,13 +120,14 @@ void creer_tableaux(FILE *file, char tab[150][45], char bankMots[13][13]) {
    int compt = 0;
    valider_fichier_existe(file);
    while (file && compt <= 45) {
-      compt <= 12 ? creer_tab_mots(bankMots, file, (int *) &compt) : obtenir_mots(tab, file, (int *) &compt);
+      compt <= 12 ? creer_tab_bankmots(bankMots, file, (int *) &compt) : creer_tab_motrecherche(tab, file, (int *)&compt);
       compt++;
    }
+
    fclose(file);
 }
 
-void valider_fichier(int argc) {
+void valider_fichier_args(int argc) {
    if (argc == 1) {
       printf("Argument manquant\n");
       exit(0);
@@ -146,7 +148,8 @@ void lire_fichier(char **argv) {
 }
 
 int main(int argc, char *argv[]) {
-   valider_fichier(argc);
+   valider_fichier_args(argc);
    lire_fichier(argv);
    return 0;
 }
+ 
