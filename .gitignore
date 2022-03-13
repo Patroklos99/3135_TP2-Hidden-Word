@@ -4,3 +4,4 @@ motcache
 entree.txt
 *.txt
 ftest
+*.o
