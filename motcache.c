@@ -8,7 +8,7 @@ enum dir {
     N, E, S, O
 };
 
-void creerTabMots(char tab[13][13], FILE *file, int *compt) {
+void creer_tab_mots(char tab[13][13], FILE *file, int *compt) {
    int c;
    int a = 0;
    int b = 0;
@@ -26,7 +26,7 @@ void creerTabMots(char tab[13][13], FILE *file, int *compt) {
    *compt = 12;
 }
 
-void obtenirMots(char tab[150][45], FILE *file, const int *compt) {
+void obtenir_mots(char tab[150][45], FILE *file, const int *compt) {
    int i = *compt;
    i = i - 13;
    (fgets(tab[i], 14, file));
@@ -36,7 +36,7 @@ void modifier(char bank[13][13], int x, int y) {
    bank[y][x] = (char) tolower(bank[y][x]);
 }
 
-bool trouverMot(char tab[150][45], char bankMots[13][13], int x, int y, int longueurMatch, int motNumero, enum dir
+bool trouver_mot(char tab[150][45], char bankMots[13][13], int x, int y, int longueurMatch, int motNumero, enum dir 
         dir) {
    int longueurMot = (int) strlen(tab[motNumero]) - 1;
    if (longueurMot == longueurMatch)
@@ -47,20 +47,20 @@ bool trouverMot(char tab[150][45], char bankMots[13][13], int x, int y, int long
       bool answer;
       switch (dir) {
          case N:
-            answer = trouverMot(tab, bankMots, x + 1, y,
-                                (longueurMatch + 1), motNumero, N);
+            answer = trouver_mot(tab, bankMots, x + 1, y,
+                                 (longueurMatch + 1), motNumero, N);
             break;
          case S:
-            answer = trouverMot(tab, bankMots, x - 1, y,
-                                (longueurMatch + 1), motNumero, S);
+            answer = trouver_mot(tab, bankMots, x - 1, y,
+                                 (longueurMatch + 1), motNumero, S);
             break;
          case O:
-            answer = trouverMot(tab, bankMots, x, y - 1,
-                                (longueurMatch + 1), motNumero, O);
+            answer = trouver_mot(tab, bankMots, x, y - 1,
+                                 (longueurMatch + 1), motNumero, O);
             break;
          case E:
-            answer = trouverMot(tab, bankMots, x, y + 1,
-                                (longueurMatch + 1), motNumero, E);
+            answer = trouver_mot(tab, bankMots, x, y + 1,
+                                 (longueurMatch + 1), motNumero, E);
             break;
       }
       if (answer)
@@ -70,17 +70,17 @@ bool trouverMot(char tab[150][45], char bankMots[13][13], int x, int y, int long
       return false;
 }
 
-void trouverPremierLettre(char tab[150][45], char bankMots[13][13]) {
-   int w = 0;
+void trouver_premier_lettre(char tab[150][45], char bankMots[13][13]) {
+   int motNumero = 0;
    int longueurMatch = 0;
    for (int nligne = 0; nligne <= 11; nligne++) {
       for (int ncol = 0; ncol <= 12; ncol++) {
-         if ((tab[w][0] | 0x20) == (bankMots[ncol][nligne] | 0x20)) {
-            if (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, E)
-                || (trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, O))
-                || trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, N)
-                || trouverMot(tab, bankMots, nligne, ncol, longueurMatch, w, S)) {
-               w++;
+         if ((tab[motNumero][0] | 0x20) == (bankMots[ncol][nligne] | 0x20)) {
+            if (trouver_mot(tab, bankMots, nligne, ncol, longueurMatch, motNumero, E)
+                || (trouver_mot(tab, bankMots, nligne, ncol, longueurMatch, motNumero, O))
+                || trouver_mot(tab, bankMots, nligne, ncol, longueurMatch, motNumero, N)
+                || trouver_mot(tab, bankMots, nligne, ncol, longueurMatch, motNumero, S)) {
+               motNumero++;
                ncol = 0;
                nligne = -1;
             }
@@ -89,7 +89,7 @@ void trouverPremierLettre(char tab[150][45], char bankMots[13][13]) {
    }
 }
 
-void afficherMot(char bankMots[13][13]) {
+void afficher_mot(char bankMots[13][13]) {
    for (int b = 0; b <= 11; b++) {
       for (int a = 0; a <= 12; a++)
          if (isupper(bankMots[a][b]))
@@ -97,28 +97,28 @@ void afficherMot(char bankMots[13][13]) {
    }
 }
 
-void rechercheMots(char tab[150][45], char bankMots[13][13]) {
-   trouverPremierLettre(tab, bankMots);
+void recherche_mots(char tab[150][45], char bankMots[13][13]) {
+   trouver_premier_lettre(tab, bankMots);
 }
 
-void validerFichierExiste(FILE *file) {
+void valider_fichier_existe(FILE *file) {
    if (!file) {
       printf("Fichier n'existe pas\n");
       exit(0);
    }
 }
 
-void creerTableaux(FILE *file, char tab[150][45], char bankMots[13][13]) {
+void creer_tableaux(FILE *file, char tab[150][45], char bankMots[13][13]) {
    int compt = 0;
-   validerFichierExiste(file);
+   valider_fichier_existe(file);
    while (file && compt <= 45) {
-      compt <= 12 ? creerTabMots(bankMots, file, (int *) &compt) : obtenirMots(tab, file, (int *) &compt);
+      compt <= 12 ? creer_tab_mots(bankMots, file, (int *) &compt) : obtenir_mots(tab, file, (int *) &compt);
       compt++;
    }
    fclose(file);
 }
 
-void validerFichier(int argc) {
+void valider_fichier(int argc) {
    if (argc == 1) {
       printf("Argument manquant\n");
       exit(0);
@@ -129,18 +129,18 @@ void validerFichier(int argc) {
    }
 }
 
-void lireFichier(char **argv) {
+void lire_fichier(char **argv) {
    char tab[150][45];
    char bankMots[13][13];
    FILE *file = fopen(argv[1], "r");
-   creerTableaux(file, tab, bankMots);
-   rechercheMots(tab, bankMots);
-   afficherMot(bankMots);
+   creer_tableaux(file, tab, bankMots);
+   recherche_mots(tab, bankMots);
+   afficher_mot(bankMots);
 }
 
 int main(int argc, char *argv[]) {
-   validerFichier(argc);
-   lireFichier(argv);
+   valider_fichier(argc);
+   lire_fichier(argv);
    return 0;
 }
 
