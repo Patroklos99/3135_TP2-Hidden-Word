@@ -1,3 +1,14 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP2 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe motcache.c
+ *  Represente la classe main, de plusieurs autres classes, contenant le main.
+ *  Ce projet execute la lecture d'un fichier comme argument et fait l'affichage d'un mot caché à l'intérieur de ce fichier.
+ */
+
 #include "fonctrecherche.h"
 #include "fonctlecture.h"
 #include "fonctcreertab.h"
