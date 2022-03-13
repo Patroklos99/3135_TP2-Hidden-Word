@@ -12,11 +12,12 @@ fonctrecherche.o: fonctrecherche.c motcache.h fonctrecherche.h
 motcache.o: motcache.c motcache.h 
 	gcc -Wall -Wextra -std=c11 -c motcache.c
 
-test:   motcache 
+test:   link
 	bats check.bats
 clean: 
 	rm -f *.o *.html motcache 
-
+html: README.md
+	pandoc -s --self-contained --css=./misc/github-pandoc.css --metadata title=" " README.md -o README.html 
 link: compile
 	gcc *.o -o motcache
 	#gcc -o motcache -Wall -Wextra -std=c11 motcache.c
