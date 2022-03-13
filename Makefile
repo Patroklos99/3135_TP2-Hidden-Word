@@ -1,4 +1,4 @@
-motcache: motcache.c
+make:
 	gcc -o motcache -Wall -Wextra -std=c11 motcache.c
 test:   motcache 
 	bats check.bats

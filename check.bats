@@ -1,8 +1,9 @@
 prog=motcache
 arg=entree.txt
+nom=""
 # Normal usage
 
-@test "test0 : tester q" {
+@test "test0 : sans aucune entree, affichage d'erreur" {
    #skip
    run ./$prog
    [ "${lines[0]}" = "Argument manquant" ]
@@ -14,6 +15,11 @@ arg=entree.txt
     [ "${lines[0]}" = "PRESIDENTKENNEDY" ]
 }
 
+@test "test2 : Trop d'arguments" {
+    #skip
+    run ./$prog $arg $arg
+    [ "${lines[0]}" = "Trop d'arguments" ]
+}
 
 
 
