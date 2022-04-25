@@ -1,16 +1,13 @@
+CFLAGS:=-g -Wall -Wextra -std=c11
+
 Make: link
 compile: fonctaffichage.o fonctlecture.o fonctcreertab.o fonctrecherche.o motcache.o
-fonctaffichage.o: fonctaffichage.c fonctlecture.h fonctaffichage.h
-	gcc -Wall -Wextra -std=c11 -c fonctaffichage.c
 
-fonctlecture.o: fonctlecture.c fonctcreertab.h fonctlecture.h
-	gcc -Wall -Wextra -std=c11 -c fonctlecture.c
-fonctcreertab.o: fonctcreertab.c fonctrecherche.h fonctcreertab.h
-	gcc -Wall -Wextra -std=c11 -c fonctcreertab.c
-fonctrecherche.o: fonctrecherche.c motcache.h fonctrecherche.h
-	gcc -Wall -Wextra -std=c11 -c fonctrecherche.c
+fonctaffichage.o: fonctaffichage.c fonctaffichage.h
+fonctlecture.o: fonctlecture.c fonctlecture.h
+fonctcreertab.o: fonctcreertab.c fonctcreertab.h
+fonctrecherche.o: fonctrecherche.c fonctrecherche.h
 motcache.o: motcache.c motcache.h 
-	gcc -Wall -Wextra -std=c11 -c motcache.c
 
 test:   link
 	bats check.bats

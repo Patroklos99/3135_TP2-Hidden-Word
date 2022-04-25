@@ -8,6 +8,7 @@
 #include "fonctrecherche.h"
 #include "fonctaffichage.h"
 #include "motcache.h"
+
 /*
  * Affiche le mot caché dans le grille 12x12.
  *
