@@ -2,8 +2,11 @@
 
 
 ## Description
-
 Projet(suite) d'introduction au langage C. Ce projet execute la lecture d'un fichier comme argument et fait l'affichage d'un mot caché à l'intérieur de ce fichier.
+
+- ![image](https://user-images.githubusercontent.com/96098657/187109065-9e7a7989-3ade-4487-99b4-59185e877f0f.png)
+
+- <img src="https://user-images.githubusercontent.com/96098657/187109207-044c9400-b70c-496f-a045-052f5f1d5c25.png" alt="drawing" width="140"/> <img src="https://user-images.githubusercontent.com/96098657/187109241-36319235-b393-4291-9152-71caa8152aa1.png" alt="drawing" width="100"/>
 
 Le fichier lu sera passé comme argument et traité ensuite.
 La redirection n'est pas supportée.
