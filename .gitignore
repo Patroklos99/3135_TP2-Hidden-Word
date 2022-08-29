@@ -1,7 +1,7 @@
 *.swp
 *.html
 motcache
-*.txt
+#*.txt
 ftest
 *.o
 #entree.txt
